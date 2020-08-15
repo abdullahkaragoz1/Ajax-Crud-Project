@@ -1,0 +1,327 @@
+﻿@using AjaxExample.Controllers
+
+@{
+    ViewBag.Title = "View1";
+    Layout = "~/Views/Shared/styles.cshtml";
+}
+
+@*Talolar*@
+<h2>Eklenen Kayıtlar</h2>
+<div class="row">
+    <div class="col-sm-5">
+        <table id="tbl-currentTopics" class="table table-striped" cellspacing="0" width="100%" align="center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>RecordId</th>
+                    <th>Course Name</th>
+                    <th>Added Date</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    @*TABLE*@
+    <table id="tbl-school" class="table table-striped" cellspacing="0" width="100% " align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>InfoId</th>
+                <th>Course Name</th>
+                <th>Fee</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+
+
+    @*CHART.JS*@
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'CourseName');
+                data.addColumn('number', 'fee');
+
+
+
+                // Set chart options
+                var options = {
+                    'title': 'Kurs Grafiği',
+                    'width': 1000,
+                    'height': 700,
+                    'colors': ['#df854f','black','yellow','pink']
+                };
+
+
+                $.ajax({
+                    url: '@Url.Action("GetChart", "lolc")',
+                    datatype: "json",
+                    type: "get",
+                    async: false,
+                    data: {},
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(d) {
+                        $.each(d,
+                            function(index, item) {
+                                data.addRow([item.CourseName,item.fee]);
+                            });
+                    },
+                    error: function(xhr) {
+                        alert("Error " + xhr);
+                    }
+                });
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+    </script>
+
+
+    @*DATE PİCKER*@
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <div class="col-sm-8">
+        <div class="panel-body" style="margin-left:150px;">
+
+            <h2>Charts Example</h2>
+            <br />
+            <input id="datepicker1" width="276" placeholder="Başlangıç Tarihini Seçiniz" />&nbsp;
+            <input id="datepicker2" width="276" placeholder="Bitiş Tarihini Seçiniz" />
+
+            <script>
+                $('#datepicker1').datepicker({
+                    dateFormat: "dd-mm-yy",
+                    altFieldTimeOnly: false,
+                    altFormat: "yy-mm-dd",
+                    altTimeFormat: "h:m",
+                    altField: "#tarih-db",
+                    monthNames: [
+                        "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim",
+                        "Kasım", "Aralık"
+                    ],
+                    dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+                    firstDay: 1
+                });
+
+                $('#datepicker2').datepicker({
+                    dateFormat: "dd-mm-yy",
+                    altFieldTimeOnly: false,
+                    altFormat: "yy-mm-dd",
+                    altTimeFormat: "h:m",
+                    altField: "#tarih-db",
+                    monthNames: [
+                        "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim",
+                        "Kasım", "Aralık"
+                    ],
+                    dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+                    firstDay: 1
+                });
+
+            </script>
+
+        </div>
+    </div>
+
+    <div id="chart_div" style="margin-left:-130px;"></div>
+
+
+
+    @*CRUD İşlemleri*@
+    <script>
+        getall();
+        getAddedRecords();
+        var isNew = true;
+
+        //Kutulardaki yazıyı ekleme
+        function addProject() {
+
+            var url = '';
+            var data = '';
+            var method;
+
+            if (isNew == true) {
+                url = '/lolc/save';
+                data = "{coursename : '" + $('#name').val() + "',fee : '" + $('#fee').val() + "'}";
+                method = 'POST';
+            } else {
+                url = '/lolc/save';
+                data = "{coursename : '" + $('#name').val() + "',fee : '" + $('#fee').val() + "', id: '" + ID + "'}";
+                method = 'POST';
+            }
+
+
+            $.ajax({
+                type: method,
+                url: url,
+                dataType: 'JSON',
+                contentType: "application/json; charset=utf-8",
+                data: data,
+
+                success: function (data) {
+                    getall();
+                    if (isNew) {
+                        alert("success");
+                    } else {
+                        alert("Updated");
+
+                    }
+                }
+
+
+            });
+
+        }
+
+        //Tarih
+        function dateFormat(d) {
+            var datenew = new Date(parseInt((d).match(/\d+/)[0]));
+            return (datenew.getDate() + "").padStart(2, "0")
+                + "/" + ((datenew.getMonth() + 1) + "").padStart(2, "0")
+                + "/" + datenew.getFullYear();
+        }
+
+        //Kayıt Tarihi
+        function CurrentdateFormat(d) {
+            var datenew = new Date(parseInt((d).match(/\d+/)[0]));
+            return (datenew.getDate() + "").padStart(2, "0")
+                + "/" + ((datenew.getMonth() + 1) + "").padStart(2, "0")
+                + "/" + datenew.getFullYear();
+        }
+
+        //Varolan kayıtarın olduğu tabloyu dolduruyoruz
+        function getall() {
+            $('#tbl-school').dataTable().fnDestroy();
+            $('#tbl-school').DataTable({
+                "ajax": {
+                    "url": '/lolc/GetCourses',
+                    "type": "get",
+                    "datatype": "JSON"
+
+                },
+                "columns":
+                    [
+                        { data: "recordId" },
+                        { data: "InfoId" },
+                        { data: "CourseName" },
+                        { data: "fee" },
+
+                        {
+                            data: "date",
+                            "render": function (data) {
+                                return dateFormat(data);
+                            }
+
+                        },
+                        {
+                            data: "recordId",
+                            "render": function (data) {
+
+                                return '<button class="btn btn-success" onclick="get_course(' +
+                                    data +
+                                    ')">Edit</button>';
+                            }
+                        },
+                        {
+                            data: "InfoId",
+                            "render": function (data) {
+                                return '<button class="btn btn-danger" onclick="get_delete(' +
+                                    data +
+                                    ')">Delete</button>';
+                            }
+                        }
+
+                    ]
+            });
+
+
+        }
+
+        //Mevcut kayıtların ne zaman eklendiği ile ilgi olan tabloyu dolduruyoruz
+        function getAddedRecords() {
+            $('#tbl-currentTopics').dataTable().fnDestroy();
+            $('#tbl-currentTopics').DataTable({
+                "ajax": {
+                    "url": '/lolc/GetCurrentCourses',
+                    "type": "get",
+                    "datatype": "JSON"
+                },
+                "columns": [
+                    { data: "recordId" },
+                    { data: "CourseName" },
+                    {
+                        data: "recordDate",
+                        "render": function (data) {
+                            return CurrentdateFormat(data);
+                        }
+                    }
+
+                ]
+            });
+        }
+
+        //kursun name ve fee sini getirir
+        function get_course(id) {
+
+            $.ajax({
+                type: 'GET',
+                url: '/lolc/Edit',
+                data: { id: id },
+                dataType: 'JSON',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    isNew = false;
+
+                    ID = data.id;
+                    $('#name').val(data.coursename);
+                    $('#fee').val(data.fee);
+
+                }
+
+
+            });
+        }
+
+        //Delete işlemi
+        function get_delete(InfoId) {
+
+            $.ajax({
+                url: '/lolc/Remove',
+                data: { InfoId: InfoId },
+                type: 'POST',
+                dataType: 'JSON',
+                success: function (data) {
+                    alert("Deleted");
+                    getall();
+                    getAddedRecords();
+                }
+            });
+        }
+
+    </script>
+
+}

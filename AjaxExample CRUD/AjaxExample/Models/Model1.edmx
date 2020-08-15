@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DboKursListesiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Tbl_Records">
+          <Key>
+            <PropertyRef Name="recordId" />
+          </Key>
+          <Property Name="recordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CourseName" Type="varchar" MaxLength="50" />
+          <Property Name="recordDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tbl_RecordsInfo">
+          <Key>
+            <PropertyRef Name="InfoId" />
+          </Key>
+          <Property Name="InfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fee" Type="int" />
+          <Property Name="date" Type="datetime" />
+          <Property Name="recordId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Tbl_RecordsInfo_Tbl_Records">
+          <End Role="Tbl_Records" Type="Self.Tbl_Records" Multiplicity="0..1" />
+          <End Role="Tbl_RecordsInfo" Type="Self.Tbl_RecordsInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Records">
+              <PropertyRef Name="recordId" />
+            </Principal>
+            <Dependent Role="Tbl_RecordsInfo">
+              <PropertyRef Name="recordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DboKursListesiModelStoreContainer">
+          <EntitySet Name="Tbl_Records" EntityType="Self.Tbl_Records" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tbl_RecordsInfo" EntityType="Self.Tbl_RecordsInfo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Tbl_RecordsInfo_Tbl_Records" Association="Self.FK_Tbl_RecordsInfo_Tbl_Records">
+            <End Role="Tbl_Records" EntitySet="Tbl_Records" />
+            <End Role="Tbl_RecordsInfo" EntitySet="Tbl_RecordsInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DboKursListesiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DboKursListesiEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Tbl_Records" EntityType="DboKursListesiModel.Tbl_Records" />
+          <EntitySet Name="Tbl_RecordsInfo" EntityType="DboKursListesiModel.Tbl_RecordsInfo" />
+          <AssociationSet Name="FK_Tbl_RecordsInfo_Tbl_Records" Association="DboKursListesiModel.FK_Tbl_RecordsInfo_Tbl_Records">
+            <End Role="Tbl_Records" EntitySet="Tbl_Records" />
+            <End Role="Tbl_RecordsInfo" EntitySet="Tbl_RecordsInfo" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Tbl_Records">
+          <Key>
+            <PropertyRef Name="recordId" />
+          </Key>
+          <Property Name="recordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CourseName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="recordDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Tbl_RecordsInfo" Relationship="DboKursListesiModel.FK_Tbl_RecordsInfo_Tbl_Records" FromRole="Tbl_Records" ToRole="Tbl_RecordsInfo" />
+        </EntityType>
+        <EntityType Name="Tbl_RecordsInfo">
+          <Key>
+            <PropertyRef Name="InfoId" />
+          </Key>
+          <Property Name="fee" Type="Int32" />
+          <Property Name="date" Type="DateTime" Precision="3" />
+          <Property Name="recordId" Type="Int32" />
+          <NavigationProperty Name="Tbl_Records" Relationship="DboKursListesiModel.FK_Tbl_RecordsInfo_Tbl_Records" FromRole="Tbl_RecordsInfo" ToRole="Tbl_Records" />
+          <Property Name="InfoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="FK_Tbl_RecordsInfo_Tbl_Records">
+          <End Type="DboKursListesiModel.Tbl_Records" Role="Tbl_Records" Multiplicity="0..1" >
+          </End>
+          <End Type="DboKursListesiModel.Tbl_RecordsInfo" Role="Tbl_RecordsInfo" Multiplicity="*" >
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Tbl_Records">
+              <PropertyRef Name="recordId" />
+            </Principal>
+            <Dependent Role="Tbl_RecordsInfo">
+              <PropertyRef Name="recordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DboKursListesiModelStoreContainer" CdmEntityContainer="DboKursListesiEntities">
+          <EntitySetMapping Name="Tbl_Records">
+            <EntityTypeMapping TypeName="DboKursListesiModel.Tbl_Records">
+              <MappingFragment StoreEntitySet="Tbl_Records">
+                <ScalarProperty Name="recordDate" ColumnName="recordDate" />
+                <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+                <ScalarProperty Name="recordId" ColumnName="recordId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tbl_RecordsInfo">
+            <EntityTypeMapping TypeName="DboKursListesiModel.Tbl_RecordsInfo">
+              <MappingFragment StoreEntitySet="Tbl_RecordsInfo">
+                <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+                <ScalarProperty Name="recordId" ColumnName="recordId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="fee" ColumnName="fee" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

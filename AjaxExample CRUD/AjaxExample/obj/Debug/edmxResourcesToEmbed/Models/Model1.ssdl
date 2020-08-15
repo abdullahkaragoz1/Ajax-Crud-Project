@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DboKursListesiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Tbl_Records">
+    <Key>
+      <PropertyRef Name="recordId" />
+    </Key>
+    <Property Name="recordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CourseName" Type="varchar" MaxLength="50" />
+    <Property Name="recordDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Tbl_RecordsInfo">
+    <Key>
+      <PropertyRef Name="InfoId" />
+    </Key>
+    <Property Name="InfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fee" Type="int" />
+    <Property Name="date" Type="datetime" />
+    <Property Name="recordId" Type="int" />
+  </EntityType>
+  <Association Name="FK_Tbl_RecordsInfo_Tbl_Records">
+    <End Role="Tbl_Records" Type="Self.Tbl_Records" Multiplicity="0..1" />
+    <End Role="Tbl_RecordsInfo" Type="Self.Tbl_RecordsInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Records">
+        <PropertyRef Name="recordId" />
+      </Principal>
+      <Dependent Role="Tbl_RecordsInfo">
+        <PropertyRef Name="recordId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DboKursListesiModelStoreContainer">
+    <EntitySet Name="Tbl_Records" EntityType="Self.Tbl_Records" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_RecordsInfo" EntityType="Self.Tbl_RecordsInfo" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Tbl_RecordsInfo_Tbl_Records" Association="Self.FK_Tbl_RecordsInfo_Tbl_Records">
+      <End Role="Tbl_Records" EntitySet="Tbl_Records" />
+      <End Role="Tbl_RecordsInfo" EntitySet="Tbl_RecordsInfo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

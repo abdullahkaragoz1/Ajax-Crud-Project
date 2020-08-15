@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DboKursListesiModelStoreContainer" CdmEntityContainer="DboKursListesiEntities">
+    <EntitySetMapping Name="Tbl_Records">
+      <EntityTypeMapping TypeName="DboKursListesiModel.Tbl_Records">
+        <MappingFragment StoreEntitySet="Tbl_Records">
+          <ScalarProperty Name="recordDate" ColumnName="recordDate" />
+          <ScalarProperty Name="CourseName" ColumnName="CourseName" />
+          <ScalarProperty Name="recordId" ColumnName="recordId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_RecordsInfo">
+      <EntityTypeMapping TypeName="DboKursListesiModel.Tbl_RecordsInfo">
+        <MappingFragment StoreEntitySet="Tbl_RecordsInfo">
+          <ScalarProperty Name="InfoId" ColumnName="InfoId" />
+          <ScalarProperty Name="recordId" ColumnName="recordId" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="fee" ColumnName="fee" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
